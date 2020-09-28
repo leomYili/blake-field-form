@@ -1,0 +1,12 @@
+.storybook
+node_modules/
+/.vscode/
+yarn.lock
+package-lock.json
+/.docz
+dist
+/lib
+/es
+.idea/
+.DS_Store
+*.tmp
