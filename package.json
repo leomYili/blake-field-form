@@ -1,6 +1,6 @@
 {
   "name": "blake-field-form",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "对antd V4 版本的Form表单进行的模仿封装,底层引用 rc-field-form",
   "main": "lib/index",
   "module": "es/index",
@@ -12,10 +12,10 @@
   },
   "repository": { 
     "type": "git", 
-    "url": "git+https://github.com/XXXX"
+    "url": "git+https://github.com/leomYili/blake-field-form"
   },
   "bugs": { 
-    "url": "https://github.com/XXXX"
+    "url": "https://github.com/leomYili/blake-field-form/issues"
   }, 
   "keywords": [
     "form"
