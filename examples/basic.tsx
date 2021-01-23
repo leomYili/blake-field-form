@@ -75,46 +75,6 @@ const Demo = () => {
         <Input />
       </Form.Item>
 
-      <Form.Item label="Username" name="username4" rules={[{ required: true, message: 'Please input your username!' }]}>
-        <Input />
-      </Form.Item>
-
-      <Form.Item label="Username" name="username5" rules={[{ required: true, message: 'Please input your username!' }]}>
-        <Input />
-      </Form.Item>
-
-      <Form.Item label="Username" name="username6" rules={[{ required: true, message: 'Please input your username!' }]}>
-        <Input />
-      </Form.Item>
-
-      <Form.Item label="Username" name="username7" rules={[{ required: true, message: 'Please input your username!' }]}>
-        <Input />
-      </Form.Item>
-
-      <Form.Item label="Username" name="username8" rules={[{ required: true, message: 'Please input your username!' }]}>
-        <Input />
-      </Form.Item>
-
-      <Form.Item label="Username" name="username9" rules={[{ required: true, message: 'Please input your username!' }]}>
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="Username"
-        name="username10"
-        rules={[{ required: true, message: 'Please input your username!' }]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="Username"
-        name="username11"
-        rules={[{ required: true, message: 'Please input your username!' }]}
-      >
-        <Input />
-      </Form.Item>
-
       <Form.Item
         label="Username"
         name="username12"
@@ -123,15 +83,35 @@ const Demo = () => {
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label="Username"
-        name="username13"
-        rules={[{ required: true, message: 'Please input your username!' }]}
-      >
-        <Input />
-      </Form.Item>
-
       <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Please input your password!' }]}>
+        <Input.Password />
+      </Form.Item>
+      
+      <Form.Item
+        name="confirm"
+        label="Confirm Password"
+        dependencies={['password']}
+        hasFeedback
+        rules={[
+          {
+            required: true,
+            message: 'Please confirm your password!',
+          },
+          ({ getFieldValue }) => ({
+            validator(rule, value) {
+              const password = getFieldValue('password');
+              if (password === '123' && value === '123') {
+                return Promise.reject('123');
+              }
+              if (password === '12' && value === '123') {
+                return Promise.reject('321');
+              }
+
+              return Promise.resolve();
+            },
+          }),
+        ]}
+      >
         <Input.Password />
       </Form.Item>
 

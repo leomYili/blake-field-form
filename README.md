@@ -24,6 +24,10 @@ npm install blake-field-form --save-dev
 validateFieldsAndScroll(nameList?: NamePath[], options?: ScrollOptions) => Promise
 ```
 
+## 当前版本
+
+与ant-design保持一致, v4.10.3
+
 ## 补充说明
 
 新版的结构与之前的不符,包里面调整过样式属性名称.
