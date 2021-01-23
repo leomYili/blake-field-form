@@ -65,7 +65,7 @@ const FormItemInput: React.FC<FormItemInputProps & FormItemInputMiscProps> = pro
   const IconNode = validateStatus && iconMap[validateStatus];
   const icon =
     hasFeedback && IconNode ? (
-      <span className={`${baseClassName}-children-icon`}>
+      <span className={`${baseClassName}-item-children-icon`}>
         <IconNode />
       </span>
     ) : null;
@@ -76,8 +76,8 @@ const FormItemInput: React.FC<FormItemInputProps & FormItemInputMiscProps> = pro
   delete subFormContext.wrapperCol;
 
   const inputDom = (
-    <div className={`${baseClassName}-control-input`}>
-      <div className={`${baseClassName}-control-input-content`}>{children}</div>
+    <div className={`${baseClassName}-item-children`}>
+      {children}
       {icon}
     </div>
   );

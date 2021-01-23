@@ -57,7 +57,7 @@ export default function ErrorList({
     }
   }, [visible, status]);
 
-  const baseClassName = `${prefixCls}-item-explain`;
+  const baseClassName = `${prefixCls}-explain`;
 
   return (
     <CSSMotion
@@ -73,10 +73,7 @@ export default function ErrorList({
       {({ className: motionClassName }: { className?: string }) => (
         <div
           className={classNames(
-            baseClassName,
-            {
-              [`${baseClassName}-${innerStatus}`]: innerStatus,
-            },
+            baseClassName,// v3如果使用后缀,就找不到对应的样式了
             motionClassName,
           )}
           key="help"
