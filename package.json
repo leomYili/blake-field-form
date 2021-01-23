@@ -1,6 +1,6 @@
 {
   "name": "blake-field-form",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "对antd V4 版本的Form表单进行的模仿封装,底层引用 rc-field-form",
   "main": "lib/index",
   "module": "es/index",

@@ -52,7 +52,7 @@ const FormItemInput: React.FC<FormItemInputProps & FormItemInputMiscProps> = pro
 
   const mergedWrapperCol: ColProps = wrapperCol || formContext.wrapperCol || {};
 
-  const className = classNames(`${baseClassName}-control`, mergedWrapperCol.className);
+  const className = classNames(`${baseClassName}-item-control`, mergedWrapperCol.className);
 
   React.useEffect(
     () => () => {
