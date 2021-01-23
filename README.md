@@ -1,5 +1,7 @@
 # BlackLake 对 rc-field-form 组件的封装
 
+> 在ant-design v3环境中也可用的 v4版本 field-form 的兼容版本
+
 ## 安装
 
 ```()
