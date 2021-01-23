@@ -4,14 +4,11 @@ import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import CloseCircleFilled from '@ant-design/icons/CloseCircleFilled';
 import CheckCircleFilled from '@ant-design/icons/CheckCircleFilled';
 import ExclamationCircleFilled from '@ant-design/icons/ExclamationCircleFilled';
-import useMemo from 'rc-util/lib/hooks/useMemo';
-import CSSMotion from 'rc-motion';
 
 import { Col, ColProps } from 'antd/lib/grid';
 import { ValidateStatus } from './FormItem';
-import { FormContext } from './context';
-import useCacheErrors from './hooks/useCacheErrors';
-import useForceUpdate from './hooks/useForceUpdate';
+import { FormContext, FormItemPrefixContext } from './context';
+import ErrorList from './ErrorList';
 
 interface FormItemInputMiscProps {
   prefixCls: string;
@@ -26,6 +23,7 @@ export interface FormItemInputProps {
   wrapperCol?: ColProps;
   help?: React.ReactNode;
   extra?: React.ReactNode;
+  status?: ValidateStatus;
 }
 
 const iconMap: { [key: string]: any } = {
@@ -35,56 +33,32 @@ const iconMap: { [key: string]: any } = {
   validating: LoadingOutlined,
 };
 
-const FormItemInput: React.FC<FormItemInputProps & FormItemInputMiscProps> = ({
-  prefixCls,
-  wrapperCol,
-  children,
-  help,
-  errors,
-  onDomErrorVisibleChange,
-  hasFeedback,
-  validateStatus,
-  extra,
-}) => {
-  const forceUpdate = useForceUpdate();
-
+const FormItemInput: React.FC<FormItemInputProps & FormItemInputMiscProps> = props => {
+  const {
+    prefixCls,
+    status,
+    wrapperCol,
+    children,
+    help,
+    errors,
+    onDomErrorVisibleChange,
+    hasFeedback,
+    validateStatus,
+    extra,
+  } = props;
   const baseClassName = `${prefixCls}`;
 
   const formContext = React.useContext(FormContext);
 
   const mergedWrapperCol: ColProps = wrapperCol || formContext.wrapperCol || {};
 
-  const className = classNames(`${baseClassName}-item-control`, mergedWrapperCol.className);
-
-  const [visible, cacheErrors] = useCacheErrors(
-    errors,
-    changedVisible => {
-      if (changedVisible) {
-        /**
-         * We trigger in sync to avoid dom shaking but this get warning in react 16.13.
-         * So use Promise to keep in micro async to handle this.
-         * https://github.com/ant-design/ant-design/issues/21698#issuecomment-593743485
-         */
-        Promise.resolve().then(() => {
-          onDomErrorVisibleChange(true);
-        });
-      }
-      forceUpdate();
-    },
-    !!help,
-  );
+  const className = classNames(`${baseClassName}-control`, mergedWrapperCol.className);
 
   React.useEffect(
     () => () => {
       onDomErrorVisibleChange(false);
     },
     [],
-  );
-
-  const memoErrors = useMemo(
-    () => cacheErrors,
-    visible,
-    (_, nextVisible) => nextVisible,
   );
 
   // Should provides additional icon if `hasFeedback`
@@ -101,37 +75,34 @@ const FormItemInput: React.FC<FormItemInputProps & FormItemInputMiscProps> = ({
   delete subFormContext.labelCol;
   delete subFormContext.wrapperCol;
 
+  const inputDom = (
+    <div className={`${baseClassName}-control-input`}>
+      <div className={`${baseClassName}-control-input-content`}>{children}</div>
+      {icon}
+    </div>
+  );
+  const errorListDom = (
+    <FormItemPrefixContext.Provider value={{ prefixCls, status }}>
+      <ErrorList errors={errors} help={help} onDomErrorVisibleChange={onDomErrorVisibleChange} />
+    </FormItemPrefixContext.Provider>
+  );
+
+  // If extra = 0, && will goes wrong
+  // 0&&error -> 0
+  const extraDom = extra ? <div className={`${baseClassName}-extra`}>{extra}</div> : null;
+
+  const dom = (
+    <>
+      {inputDom}
+      {errorListDom}
+      {extraDom}
+    </>
+  );
+
   return (
     <FormContext.Provider value={subFormContext}>
       <Col {...mergedWrapperCol} className={className}>
-        <div className={`${baseClassName}-control-input`}>
-          <div className={`${baseClassName}-control-input-content`}>{children}</div>
-          {icon}
-        </div>
-        <CSSMotion
-          motionDeadline={500}
-          visible={visible}
-          motionName="show-help"
-          onLeaveEnd={() => {
-            onDomErrorVisibleChange(false);
-          }}
-          motionAppear
-          removeOnLeave
-        >
-          {({ className: motionClassName }: { className: string }) => {
-            return (
-              <div className={classNames(`${baseClassName}-explain`, motionClassName)} key="help">
-                {memoErrors.map((error, index) => (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <div key={index} role="alert">
-                    {error}
-                  </div>
-                ))}
-              </div>
-            );
-          }}
-        </CSSMotion>
-        {extra && <div className={`${baseClassName}-extra`}>{extra}</div>}
+        {dom}
       </Col>
     </FormContext.Provider>
   );

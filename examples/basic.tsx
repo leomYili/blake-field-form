@@ -62,12 +62,14 @@ const Demo = () => {
         label="Username"
         name="username1"
         rules={[{ required: true, message: 'Please input your username!' }]}
+        tooltip="This is a required field"
         extra="We must make sure that your are a human."
       >
         <Input />
       </Form.Item>
 
-      <Form.Item label="Username" name="username2" rules={[{ required: true, message: 'Please input your username!' }]}>
+      <Form.Item label="Username" name="username2" rules={[{ required: true, message: 'Please input your username!' }]} tooltip={{ title: 'Tooltip with customize icon', icon:<span>提示文字</span> }}
+>
         <Input />
       </Form.Item>
 

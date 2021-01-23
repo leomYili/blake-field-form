@@ -4,6 +4,7 @@ import { FormProvider as RcFormProvider } from 'rc-field-form';
 import { FormProviderProps as RcFormProviderProps } from 'rc-field-form/lib/FormContext';
 import { ColProps } from 'antd/lib/grid';
 import { FormLabelAlign } from './interface';
+import { ValidateStatus } from './FormItem';
 
 /**
  * Form Context
@@ -30,7 +31,7 @@ export const FormContext = React.createContext<FormContextProps>({
  * Used for Form noStyle Item error collection
  */
 export interface FormItemContextProps {
-  updateItemErrors: (name: string, errors: string[]) => void;
+  updateItemErrors: (name: string, errors: string[], originName?: string) => void;
 }
 
 export const FormItemContext = React.createContext<FormItemContextProps>({
@@ -41,9 +42,21 @@ export const FormItemContext = React.createContext<FormItemContextProps>({
  * Form Provider
  *
  */
-export interface FormProviderProps extends Omit<RcFormProviderProps, 'validateMessages'> {}
+export interface FormProviderProps extends Omit<RcFormProviderProps, 'validateMessages'> {
+  prefixCls?: string;
+}
 
 export const FormProvider: React.FC<FormProviderProps> = (props: any) => {
   const providerProps = omit(props, ['prefixCls']);
   return <RcFormProvider {...providerProps} />;
 };
+
+/** Used for ErrorList only */
+export interface FormItemPrefixContextProps {
+  prefixCls: string;
+  status?: ValidateStatus;
+}
+
+export const FormItemPrefixContext = React.createContext<FormItemPrefixContextProps>({
+  prefixCls: '',
+});

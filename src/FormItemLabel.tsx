@@ -1,8 +1,30 @@
 import * as React from 'react';
 import classNames from 'classnames';
+import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import { Col, ColProps } from 'antd/lib/grid';
 import { FormLabelAlign } from './interface';
 import { FormContext, FormContextProps } from './context';
+import Tooltip, { TooltipProps } from 'antd/lib/tooltip';
+
+export type WrapperTooltipProps = TooltipProps & {
+  icon?: React.ReactElement;
+};
+
+export type LabelTooltipType = WrapperTooltipProps | React.ReactNode;
+
+function toTooltipProps(tooltip: LabelTooltipType): WrapperTooltipProps | null {
+  if (!tooltip) {
+    return null;
+  }
+
+  if (typeof tooltip === 'object' && !React.isValidElement(tooltip)) {
+    return tooltip as WrapperTooltipProps;
+  }
+
+  return {
+    title: tooltip,
+  };
+}
 
 export interface FormItemLabelProps {
   colon?: boolean;
@@ -10,6 +32,7 @@ export interface FormItemLabelProps {
   label?: React.ReactNode;
   labelAlign?: FormLabelAlign;
   labelCol?: ColProps;
+  tooltip?: LabelTooltipType;
 }
 
 const FormItemLabel: React.FC<FormItemLabelProps & { required?: boolean; prefixCls: string }> = ({
@@ -20,6 +43,7 @@ const FormItemLabel: React.FC<FormItemLabelProps & { required?: boolean; prefixC
   labelAlign,
   colon,
   required,
+  tooltip,
 }) => {
   if (!label) return null;
 
@@ -49,6 +73,35 @@ const FormItemLabel: React.FC<FormItemLabelProps & { required?: boolean; prefixC
         // Remove duplicated user input colon
         if (haveColon && typeof label === 'string' && (label as string).trim() !== '') {
           labelChildren = (label as string).replace(/[:|：]\s*$/, '');
+        }
+
+        // Tooltip
+        const tooltipProps = toTooltipProps(tooltip);
+        if (tooltipProps) {
+          const {
+            icon = (
+              <span
+                style={{
+                  marginInlineStart: '4px',
+                }}
+              >
+                <QuestionCircleOutlined />
+              </span>
+            ),
+            ...restTooltipProps
+          } = tooltipProps;
+          const tooltipNode = (
+            <Tooltip {...restTooltipProps}>
+              {React.cloneElement(icon, { className: `${prefixCls}-item-tooltip` })}
+            </Tooltip>
+          );
+
+          labelChildren = (
+            <>
+              {labelChildren}
+              {tooltipNode}
+            </>
+          );
         }
 
         const labelClassName = classNames({

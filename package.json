@@ -39,7 +39,7 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "@ant-design/icons": "^4.2.1",
+    "@ant-design/icons": "^4.3.0",
     "@babel/runtime": "^7.7.1",
     "lodash": "^4.17.20",
     "omit.js": "^2.0.2",
